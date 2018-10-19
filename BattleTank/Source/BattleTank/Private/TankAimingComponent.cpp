@@ -28,10 +28,17 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 	//Current position of barrel
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	//Calculate lower hyperbolic trajectory for hitting the HitLocation with starting speed of LaunchSpeed 
-	if (UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVilocity, StartLocation, HitLocation, LaunchSpeed, ESuggestProjVelocityTraceOption::DoNotTrace)) {
+	if (UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVilocity, StartLocation, HitLocation, LaunchSpeed, false, 0, 0, ESuggestProjVelocityTraceOption::DoNotTrace)) {
 		//Vector we got from calculating has velocity in it, so we need to normalize it (take down its length to 1 (unit vector))
 		auto AimDirection = OutLaunchVilocity.GetSafeNormal();
 		MoveBarrel(AimDirection);
+
+		auto time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f: ELEVATEEE"), time);
+	}
+	else {
+		auto time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f: No aim solution found"), time);
 	}
 }
 

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
-
+#include "Tank.h"
 
 
 
@@ -36,6 +36,7 @@ void ATankPlayerController::AimTowardsCrosshair() {
 	FVector HitLocation;
 	if (GetSightRayHitlocation(HitLocation)) {
 		GetControllerTank()->AimAt(HitLocation);
+		UE_LOG(LogTemp, Warning, TEXT("Hit location %s"), *HitLocation.ToString());
 	}
 }
 
@@ -48,8 +49,9 @@ bool ATankPlayerController::GetSightRayHitlocation(FVector& OutHitLocation) cons
 	FVector2D ScreenLocation = FVector2D(ViewPortSizeX*CrossHairXLocation, ViewPortSizeY*CrossHairYLocation);
 	FVector LookDirection;
 	if (GetLookDirection(ScreenLocation, LookDirection)) {
-		GetLookVectorHitLocation(LookDirection, OutHitLocation);
-		return true;
+		if (GetLookVectorHitLocation(LookDirection, OutHitLocation)) {
+			return true;
+		}
 	}
 	return false;
 }

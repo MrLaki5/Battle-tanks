@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Kismet/GameplayStatics.h"
 #include "TankAimingComponent.h"
+#include "TankBarrel.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -13,25 +14,8 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet) {
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet) {
 	Barrel = BarrelToSet;
-}
-
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-	
-}
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
@@ -39,14 +23,20 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 	if (!Barrel) {
 		return;
 	}
-
+	//Vector in which direction should be barrel facing to hit the HitLocation multiplied with speed (definition of Velocity)
 	FVector OutLaunchVilocity;
+	//Current position of barrel
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
-	if (UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVilocity, StartLocation, HitLocation, LaunchSpeed, false, 0, 0, ESuggestProjVelocityTraceOption::DoNotTrace)) {
+	//Calculate lower hyperbolic trajectory for hitting the HitLocation with starting speed of LaunchSpeed 
+	if (UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVilocity, StartLocation, HitLocation, LaunchSpeed, ESuggestProjVelocityTraceOption::DoNotTrace)) {
+		//Vector we got from calculating has velocity in it, so we need to normalize it (take down its length to 1 (unit vector))
 		auto AimDirection = OutLaunchVilocity.GetSafeNormal();
-	
-		UE_LOG(LogTemp, Warning, TEXT("Aiming at %s"), *AimDirection.ToString());
+		MoveBarrel(AimDirection);
 	}
+}
+
+void UTankAimingComponent::MoveBarrel(FVector AimDirection) {
+	Barrel->Elevate(5);
 }
 	
 

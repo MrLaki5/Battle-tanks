@@ -9,8 +9,6 @@ ATank* ATankAIController::GetControllerTank() const{
 
 void ATankAIController::BeginPlay() {
 	Super::BeginPlay();
-
-	auto PlayerTank = this->GetPlayerTank();
 }
 
 ATank* ATankAIController::GetPlayerTank() const {
@@ -21,6 +19,7 @@ ATank* ATankAIController::GetPlayerTank() const {
 void ATankAIController::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 	AimAtUser();
+	FireAtUser();
 }
 
 void ATankAIController::AimAtUser(){
@@ -29,4 +28,11 @@ void ATankAIController::AimAtUser(){
 	}
 	auto HitPlace = GetPlayerTank()->GetActorLocation();
 	GetControllerTank()->AimAt(HitPlace);
+}
+
+void ATankAIController::FireAtUser() {
+	if (!GetPlayerTank() || !GetControllerTank()) {
+		return;
+	}
+	GetControllerTank()->Fire();
 }

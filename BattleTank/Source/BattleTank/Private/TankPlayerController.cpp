@@ -12,8 +12,6 @@ ATank* ATankPlayerController::GetControllerTank() const {
 
 void ATankPlayerController::BeginPlay() {
 	Super::BeginPlay();
-
-	auto ControlledTank = this->GetControllerTank();
 }
 
 

@@ -14,13 +14,6 @@ void ATankPlayerController::BeginPlay() {
 	Super::BeginPlay();
 
 	auto ControlledTank = this->GetControllerTank();
-
-	if (!ControlledTank) {
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController not possesing a tank!"));
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController possessing: %s"), *ControlledTank->GetName());
-	}
 }
 
 
@@ -36,7 +29,7 @@ void ATankPlayerController::AimTowardsCrosshair() {
 	FVector HitLocation;
 	if (GetSightRayHitlocation(HitLocation)) {
 		GetControllerTank()->AimAt(HitLocation);
-		UE_LOG(LogTemp, Warning, TEXT("Hit location %s"), *HitLocation.ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("Hit location %s"), *HitLocation.ToString());
 	}
 }
 

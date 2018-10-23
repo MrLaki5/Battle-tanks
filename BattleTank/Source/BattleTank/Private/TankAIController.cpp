@@ -18,6 +18,9 @@ ATank* ATankAIController::GetPlayerTank() const {
 
 void ATankAIController::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
+
+	MoveToActor(GetPlayerTank(), AcceptanceRadius);
+
 	AimAtUser();
 	FireAtUser();
 }

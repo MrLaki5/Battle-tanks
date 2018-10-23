@@ -29,3 +29,8 @@ void UTankMovementComponent::IntendTurnRight(float Throw) {
 	LeftTrack->setThrottle(Throw);
 	RightTrack->setThrottle(-Throw);
 }
+
+void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) {
+	auto MoveVelocityString = MoveVelocity.ToString();
+	UE_LOG(LogTemp, Warning, TEXT("%s: AI tank velocity"), *MoveVelocityString);
+}

@@ -2,6 +2,7 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
 #include "Engine/World.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
@@ -51,7 +52,11 @@ void ATank::Fire() {
 		LastFireTime = FPlatformTime::Seconds();
 
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBP, Barrel->GetSocketLocation(FName("Projectile")), Barrel->GetSocketRotation(FName("Projectile")));
-
-		Projectile->LaunchProjectile(LaunchSpeed);
+		if (Projectile) {
+			Projectile->LaunchProjectile(LaunchSpeed);
+		}
+		else {
+			UE_LOG(LogTemp, Error, TEXT("Projectile blueprint in tank not set"));
+		}
 	}
 }

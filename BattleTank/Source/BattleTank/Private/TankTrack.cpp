@@ -6,8 +6,6 @@
 
 
 void UTankTrack::setThrottle(float Throttle) {
-	UE_LOG(LogTemp, Warning, TEXT("Moveee %f"), Throttle);
-
 	//Callculate force in vector
 	auto ForceApplied = GetForwardVector() * Throttle * TrackMaxDrivingForce;
 	//Find location where force is applied

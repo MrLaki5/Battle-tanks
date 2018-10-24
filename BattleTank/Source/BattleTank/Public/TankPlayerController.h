@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Milan Lazarevic
 
 #pragma once
 
@@ -7,9 +7,10 @@
 #include "TankPlayerController.generated.h"
 
 class ATank;
+class UTankAimingComponent;
 
 /**
- * 
+ * Responsible for helping player aim.
  */
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -20,7 +21,6 @@ public:
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
 private:
-	ATank* GetControllerTank() const;
 	//Start the thank moving the barrel so that a shot would hit where the crosshair intersects the world
 	void AimTowardsCrosshair();
 	//Return OUT parameter, true if landscape
@@ -34,4 +34,11 @@ private:
 		float CrossHairYLocation = 0.33333;
 	UPROPERTY(EditDefaultsOnly)
 		float LineTraceRange = 1000000;
+
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+		ATank* GetControllerTank() const;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+		void FoundAimingComponent(UTankAimingComponent* AimCompRef);
 };

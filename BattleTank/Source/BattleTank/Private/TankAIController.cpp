@@ -26,7 +26,7 @@ void ATankAIController::Tick(float DeltaTime) {
 }
 
 void ATankAIController::AimAtUser(){
-	if (!GetPlayerTank() || !GetControllerTank()) {
+	if (!ensure(GetPlayerTank() && GetControllerTank())) {
 		return;
 	}
 	auto HitPlace = GetPlayerTank()->GetActorLocation();
@@ -34,7 +34,7 @@ void ATankAIController::AimAtUser(){
 }
 
 void ATankAIController::FireAtUser() {
-	if (!GetPlayerTank() || !GetControllerTank()) {
+	if (!ensure(GetPlayerTank() && GetControllerTank())) {
 		return;
 	}
 	GetControllerTank()->Fire();

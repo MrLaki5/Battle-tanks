@@ -15,17 +15,14 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet) {
+void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet) {
 	Barrel = BarrelToSet;
-}
-
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet) {
 	Turret = TurretToSet;
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 
-	if (!Barrel) {
+	if (!ensure(Barrel)) {
 		return;
 	}
 	//Vector in which direction should be barrel facing to hit the HitLocation multiplied with speed (definition of Velocity)

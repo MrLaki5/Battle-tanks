@@ -1,6 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Milan Lazarevic
 
 #include "TankPlayerController.h"
+#include "TankAimingComponent.h"
 #include "Tank.h"
 
 
@@ -12,6 +13,10 @@ ATank* ATankPlayerController::GetControllerTank() const {
 
 void ATankPlayerController::BeginPlay() {
 	Super::BeginPlay();
+	auto AimingComponent = GetControllerTank()->FindComponentByClass<UTankAimingComponent>();
+	if (ensure(AimingComponent)) {
+		FoundAimingComponent(AimingComponent);
+	}
 }
 
 
@@ -21,7 +26,7 @@ void ATankPlayerController::Tick(float DeltaTime) {
 }
 
 void ATankPlayerController::AimTowardsCrosshair() {
-	if (!GetControllerTank()) {
+	if (!ensure(GetControllerTank())) {
 		return;
 	}
 	FVector HitLocation;

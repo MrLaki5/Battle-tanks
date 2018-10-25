@@ -6,8 +6,6 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-class ATank;
-
 /**
  * 
  */
@@ -21,8 +19,8 @@ public:
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
 private:
-	ATank* GetControllerTank() const;
-	ATank* GetPlayerTank() const;
+	APawn* GetControllerTank() const;
+	APawn* GetPlayerTank() const;
 	void AimAtUser();
 	void FireAtUser();
 

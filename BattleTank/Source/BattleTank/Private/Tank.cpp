@@ -2,7 +2,6 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 #include "Engine/World.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
@@ -19,10 +18,6 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-void ATank::AimAt(FVector HitLocation) {
-	//TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
 void ATank::Fire() {

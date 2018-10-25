@@ -33,8 +33,6 @@ private:
 
 public:	
 
-	void AimAt(FVector HitLocation);
-
 	UFUNCTION(BlueprintCallable, Category = "Actions")
 		void Fire();
 

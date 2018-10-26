@@ -18,6 +18,7 @@ enum class EFireState : uint8 {
 //Forward declaration
 class UTankBarrel;	
 class UTankTurret;
+class AProjectile;
 
 //Component used for tank aiming
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -39,6 +40,17 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float LaunchSpeed = 4000; // 400m/s
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+		TSubclassOf<AProjectile> ProjectileBP = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		float ReloadTimeInSeconds = 3;
+
+	double LastFireTime = 0;
+
+	UFUNCTION(BlueprintCallable, Category = "Actions")
+		void Fire();
 private:
 	UTankBarrel * Barrel = nullptr;
 

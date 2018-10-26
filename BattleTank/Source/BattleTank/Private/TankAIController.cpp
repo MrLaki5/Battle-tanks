@@ -40,5 +40,9 @@ void ATankAIController::FireAtUser() {
 	if (!ensure(GetPlayerTank() && GetControllerTank())) {
 		return;
 	}
-	//GetControllerTank()->Fire();
+	auto AimingComponent = GetControllerTank()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) {
+		return;
+	}
+	AimingComponent->Fire();
 }

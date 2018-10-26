@@ -36,7 +36,7 @@ public:
 		void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-		EFireState FireState = EFireState::Aiming;
+		EFireState FireState = EFireState::Reloading;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float LaunchSpeed = 4000; // 400m/s
@@ -57,4 +57,8 @@ private:
 	UTankTurret * Turret = nullptr;
 
 	void MoveBarrel(FVector AimDirection);
+
+	void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
+	void BeginPlay() override;
 };

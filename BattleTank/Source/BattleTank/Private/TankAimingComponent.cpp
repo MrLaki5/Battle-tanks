@@ -18,6 +18,7 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 void UTankAimingComponent::BeginPlay() {
+	Super::BeginPlay();
 	//So that first fire is after initial reload
 	LastFireTime = FPlatformTime::Seconds();
 }
@@ -39,7 +40,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation) {
 	//Calculate lower hyperbolic trajectory for hitting the HitLocation with starting speed of LaunchSpeed 
 	if (UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVilocity, StartLocation, HitLocation, LaunchSpeed, false, 0, 0, ESuggestProjVelocityTraceOption::DoNotTrace)) {
 		//Vector we got from calculating has velocity in it, so we need to normalize it (take down its length to 1 (unit vector))
-		auto AimDirection = OutLaunchVilocity.GetSafeNormal();
+		AimDirection = OutLaunchVilocity.GetSafeNormal();
 		MoveBarrel(AimDirection);
 
 		auto time = GetWorld()->GetTimeSeconds();
@@ -78,10 +79,22 @@ void UTankAimingComponent::Fire() {
 }
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) {
-	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds;
 	if (isReloaded) {
 		FireState = EFireState::Reloading;
 	}
+	else if(IsBarrelMoving()){
+		FireState = EFireState::Aiming;
+	}
+	else {
+		FireState = EFireState::Locked;
+	}
 }
 	
-
+bool UTankAimingComponent::IsBarrelMoving() {
+	if (!ensure(Barrel)) {
+		return false;
+	}
+	auto BarrelForward = Barrel->GetForwardVector();
+	return !BarrelForward.Equals(AimDirection, 0.01); //vectors are equal
+}

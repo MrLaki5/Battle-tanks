@@ -12,7 +12,8 @@ UENUM()
 enum class EFireState : uint8 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	OutOfAmmo
 };
 
 //Forward declaration
@@ -39,7 +40,7 @@ public:
 		EFireState FireState = EFireState::Reloading;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-		float LaunchSpeed = 4000; // 400m/s
+		float LaunchSpeed = 4000; // 40m/s
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 		TSubclassOf<AProjectile> ProjectileBP = nullptr;
@@ -51,6 +52,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Actions")
 		void Fire();
+
+	EFireState GetFireState() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+		int GetRoundsLeft();
+
 private:
 	UTankBarrel * Barrel = nullptr;
 
@@ -65,4 +72,6 @@ private:
 	bool IsBarrelMoving();
 
 	FVector AimDirection;
+
+	int RoundsLeft = 3;
 };

@@ -44,5 +44,7 @@ void ATankAIController::FireAtUser() {
 	if (!ensure(AimingComponent)) {
 		return;
 	}
-	AimingComponent->Fire();
+	if (AimingComponent->GetFireState() == EFireState::Locked) {
+		AimingComponent->Fire();
+	}
 }

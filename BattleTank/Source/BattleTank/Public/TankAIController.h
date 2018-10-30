@@ -24,6 +24,8 @@ private:
 	void AimAtUser();
 	void FireAtUser();
 
+protected:
 	//How close can AI tank get
-	float AcceptanceRadius = 3000; //in cm
+	UPROPERTY(EditDefaultsOnly, Category= "Setup")
+	float AcceptanceRadius = 8000; //in cm
 };

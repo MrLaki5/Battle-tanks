@@ -57,13 +57,18 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection) {
 	auto BarrelRotation = Barrel->GetForwardVector().Rotation();
 	auto AimRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimRotator - BarrelRotation;
-
 	Barrel->Elevate(DeltaRotator.Pitch);
-	Turret->Rotate(DeltaRotator.Yaw);
+	//Always yaw shortest way
+	if (FMath::Abs(DeltaRotator.Yaw) < 180) {
+		Turret->Rotate(DeltaRotator.Yaw);
+	}
+	else {
+		Turret->Rotate(-DeltaRotator.Yaw);
+	}
 }
 
 void UTankAimingComponent::Fire() {
-	if (FireState != EFireState::Reloading) {
+	if (FireState == EFireState::Locked || FireState==EFireState::Aiming) {
 
 		if (!ensure(Barrel)) {
 			return;
@@ -74,13 +79,28 @@ void UTankAimingComponent::Fire() {
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBP, Barrel->GetSocketLocation(FName("Projectile")), Barrel->GetSocketRotation(FName("Projectile")));
 		if (ensure(Projectile)) {
 			Projectile->LaunchProjectile(LaunchSpeed);
+			RoundsLeft--;
 		}
 	}
 }
 
+EFireState UTankAimingComponent::GetFireState() const
+{
+	return FireState;
+}
+
+int UTankAimingComponent::GetRoundsLeft()
+{
+	return RoundsLeft;
+}
+
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) {
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds;
-	if (isReloaded) {
+	if (RoundsLeft <= 0) {
+		FireState = EFireState::OutOfAmmo;
+		RoundsLeft = 0;
+	}
+	else if (isReloaded) {
 		FireState = EFireState::Reloading;
 	}
 	else if(IsBarrelMoving()){

@@ -53,10 +53,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Actions")
 		void Fire();
 
-	EFireState GetFireState() const;
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+		EFireState GetFireState() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
-		int GetRoundsLeft();
+		int32 GetRoundsLeft();
 
 private:
 	UTankBarrel * Barrel = nullptr;
@@ -73,5 +74,7 @@ private:
 
 	FVector AimDirection;
 
-	int RoundsLeft = 3;
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		int32 RoundsLeft = 3;
 };

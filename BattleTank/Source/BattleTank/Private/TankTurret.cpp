@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Milan Lazarevic
 
 #include "TankTurret.h"
 #include "Engine/World.h"

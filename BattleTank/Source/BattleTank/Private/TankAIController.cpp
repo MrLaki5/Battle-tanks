@@ -2,6 +2,7 @@
 
 #include "TankAIController.h"
 #include "TankAimingComponent.h"
+#include "Tank.h"
 
 APawn* ATankAIController::GetControllerTank() const{
 	return GetPawn();
@@ -47,4 +48,22 @@ void ATankAIController::FireAtUser() {
 	if (AimingComponent->GetFireState() == EFireState::Locked) {
 		AimingComponent->Fire();
 	}
+}
+
+void ATankAIController::SetPawn(APawn* InPawn) {
+	Super::SetPawn(InPawn);
+	if (InPawn) {
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) {
+			return;
+		}
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnPossesedTankDeath);
+	}
+}
+
+void ATankAIController::OnPossesedTankDeath() {
+	if (!GetPawn()) {
+		return;
+	}
+	GetPawn()->DetachFromControllerPendingDestroy();
 }

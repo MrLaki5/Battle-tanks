@@ -20,6 +20,12 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 public:
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
+
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+		void OnPossesedTankDeath();
+
 private:
 	//Start the thank moving the barrel so that a shot would hit where the crosshair intersects the world
 	void AimTowardsCrosshair();

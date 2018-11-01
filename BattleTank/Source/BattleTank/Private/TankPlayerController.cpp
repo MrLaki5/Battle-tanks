@@ -2,6 +2,7 @@
 
 #include "TankPlayerController.h"
 #include "TankAimingComponent.h"
+#include "Tank.h"
 
 
 void ATankPlayerController::BeginPlay() {
@@ -62,10 +63,25 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 	//Get the end location of line trace: multiply direction vector with scalar of how far are we watching and add that to our current location (start location)
 	auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
 	//Line trace, draw line from our location to direction of LookDirection vector in range of 10km and find if there is some object blocking it. If there is return hit coordinates and true, else false.
-	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility)) {
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Camera)) {
 		OutHitLocation.Set(HitResult.Location.X, HitResult.Location.Y, HitResult.Location.Z);
 		return true;
 	}
 	OutHitLocation.Set(0.0, 0.0, 0.0);
 	return false;
+}
+
+void ATankPlayerController::SetPawn(APawn* InPawn) {
+	Super::SetPawn(InPawn);
+	if (InPawn) {
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) {
+			return;
+		}
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnPossesedTankDeath);
+	}
+}
+
+void ATankPlayerController::OnPossesedTankDeath() {
+	StartSpectatingOnly();
 }

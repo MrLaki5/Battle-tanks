@@ -24,6 +24,11 @@ private:
 	void AimAtUser();
 	void FireAtUser();
 
+	virtual void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+		void OnPossesedTankDeath();
+
 protected:
 	//How close can AI tank get
 	UPROPERTY(EditDefaultsOnly, Category= "Setup")

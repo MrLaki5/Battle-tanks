@@ -26,7 +26,7 @@ void ATankAIController::Tick(float DeltaTime) {
 }
 
 void ATankAIController::AimAtUser(){
-	if (!ensure(GetPlayerTank() && GetControllerTank())) {
+	if (!(GetPlayerTank() && GetControllerTank())) {
 		return;
 	}
 	auto HitPlace = GetPlayerTank()->GetActorLocation();
@@ -38,7 +38,7 @@ void ATankAIController::AimAtUser(){
 }
 
 void ATankAIController::FireAtUser() {
-	if (!ensure(GetPlayerTank() && GetControllerTank())) {
+	if (!(GetPlayerTank() && GetControllerTank())) {
 		return;
 	}
 	auto AimingComponent = GetControllerTank()->FindComponentByClass<UTankAimingComponent>();
@@ -54,7 +54,7 @@ void ATankAIController::SetPawn(APawn* InPawn) {
 	Super::SetPawn(InPawn);
 	if (InPawn) {
 		auto PossessedTank = Cast<ATank>(InPawn);
-		if (!ensure(PossessedTank)) {
+		if (!PossessedTank) {
 			return;
 		}
 		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnPossesedTankDeath);

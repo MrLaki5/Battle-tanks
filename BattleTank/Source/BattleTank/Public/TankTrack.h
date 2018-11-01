@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Milan Lazarevic
 
 #pragma once
 
@@ -16,23 +16,18 @@ class BATTLETANK_API UTankTrack : public UStaticMeshComponent
 	
 private:
 
+	TArray<class ASprungWheel*> GetWheels() const;
+
 	void BeginPlay() override;
-
-	UFUNCTION()
-		void OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit);
-
-	float CurrentThrottle = 0;
 
 public:
 	UTankTrack();
-
-	void ApplySidewaysForce();
 
 	//Sets Throttle from -1 to 1
 	UFUNCTION(BlueprintCallable, Category = "Input")
 		void setThrottle(float Throttle);
 
-	void DriveTrack();
+	void DriveTrack(float CurrentThrottle);
 
 	//Max force per track, in Newtons (mass * acceleration)
 	UPROPERTY(EditDefaultsOnly)

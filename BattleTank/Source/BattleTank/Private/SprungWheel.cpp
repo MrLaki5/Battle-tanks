@@ -3,6 +3,7 @@
 #include "SprungWheel.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Runtime/Engine/Classes/PhysicsEngine/PhysicsConstraintComponent.h"
+#include "Runtime/Engine/Classes/Components/SphereComponent.h"
 
 
 // Sets default values
@@ -14,8 +15,14 @@ ASprungWheel::ASprungWheel()
 	MassWheelConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Mass Wheel Constraint"));
 	SetRootComponent(MassWheelConstraint);
 
-	Wheel = CreateDefaultSubobject<UStaticMeshComponent>(FName("Wheel"));
-	Wheel->SetupAttachment(MassWheelConstraint);
+	Axle = CreateDefaultSubobject<USphereComponent>(FName("Axle"));
+	Axle->SetupAttachment(MassWheelConstraint);
+
+	AxleWeelConstrain = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Axle Wheel Constraint"));
+	AxleWeelConstrain->SetupAttachment(Axle);
+
+	Wheel = CreateDefaultSubobject<USphereComponent>(FName("Wheel"));
+	Wheel->SetupAttachment(Axle);
 }
 
 // Called when the game starts or when spawned
@@ -32,7 +39,8 @@ void ASprungWheel::BeginPlay()
 		return;
 	}
 
-	MassWheelConstraint->SetConstrainedComponents(BodyRoot, NAME_None, Wheel, NAME_None);
+	MassWheelConstraint->SetConstrainedComponents(BodyRoot, NAME_None, Axle, NAME_None);
+	AxleWeelConstrain->SetConstrainedComponents(Axle, NAME_None, Wheel, NAME_None);
 }
 
 // Called every frame
@@ -42,3 +50,7 @@ void ASprungWheel::Tick(float DeltaTime)
 
 }
 
+void ASprungWheel::AddDrivingForce(float ForceMagnitude) {
+	UE_LOG(LogTemp, Warning, TEXT("force on single wheel: %f"), ForceMagnitude);
+	Wheel->AddForce(Axle->GetForwardVector() * ForceMagnitude);
+}

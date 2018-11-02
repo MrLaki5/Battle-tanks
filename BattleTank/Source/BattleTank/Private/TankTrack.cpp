@@ -25,7 +25,6 @@ void UTankTrack::DriveTrack(float CurrentThrottle)
 	auto ForceApplied =  CurrentThrottle * TrackMaxDrivingForce;
 	auto Wheels = GetWheels();
 	if(Wheels.Num()>0){
-		UE_LOG(LogTemp, Warning, TEXT("Number of wheels: %i"), Wheels.Num());
 		auto ForcePerWheel = ForceApplied / Wheels.Num();
 		for (ASprungWheel* Wheel : Wheels) {
 			Wheel->AddDrivingForce(ForcePerWheel);

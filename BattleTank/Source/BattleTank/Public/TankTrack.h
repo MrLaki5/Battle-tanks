@@ -31,6 +31,6 @@ public:
 
 	//Max force per track, in Newtons (mass * acceleration)
 	UPROPERTY(EditDefaultsOnly)
-		float TrackMaxDrivingForce = 40000000; //400000 = 40000kg *10cm/s2 *100 (conver cm to m)
+		float TrackMaxDrivingForce = 10000000; //400000 = 40000kg *10cm/s2 *100 (conver cm to m)
 	
 };

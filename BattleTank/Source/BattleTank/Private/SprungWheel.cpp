@@ -53,9 +53,7 @@ void ASprungWheel::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UE_LOG(LogTemp, Warning, TEXT("Tick"))
 	if (GetWorld()->TickGroup == TG_PostPhysics) {
-		UE_LOG(LogTemp, Warning, TEXT("Right tick"))
 		TotalForceMagnitudeThisFrame = 0;
 	}
 }
